@@ -14,9 +14,6 @@ Requirements:
 - Node + Yarn installed globally
 - A code editor of your choice
 
-The test could take up to 90 minutes, when you've completed the above setup, and have the time 
-available, request access to the code from OpenSolar.
-Once access is provided a response from the candidate is expected within the 90 minute timeframe.
 Information about the required tasks is included in the repositories README file. 
 
 ## Tasks
