@@ -1,14 +1,18 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Task } from "./interfaces";
+import ClunkyList from "./ClunkyList";
+import ClunkyFilter from "./ClunkyFilter";
+import ClunkyControls from "./ClunkyControls";
 
 export function ClunkyTodoList() {
-  const [tasks, setTasks] = useState([
+  const [tasks, setTasks] = useState<Task[]>([
     { id: 1, text: "Learn React", completed: false },
     { id: 2, text: "Write code", completed: true },
     { id: 3, text: "Eat lunch", completed: false },
   ]);
   const [newTask, setNewTask] = useState("");
   const [filter, setFilter] = useState("all");
-  const [tasksToRender, setTasksToRender] = useState<any[]>([])
+  const [tasksToRender, setTasksToRender] = useState<Task[]>([]);
   const [moreWordsFilter, setMoreWordsFilter] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,22 +21,17 @@ export function ClunkyTodoList() {
 
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
-      const tempTasks = [...tasks];
-      tempTasks.push({ id: Date.now(), text: newTask, completed: false });
-      setTasks(tempTasks);
+      // Make the code simpler but works the same
+      setTasks([...tasks, { id: Date.now(), text: newTask, completed: false }]);
       setNewTask("");
     }
   };
 
   const handleToggleComplete = (id: number) => {
-    const updatedTasks = tasks.map((task) => {
-      if (task.id === id) {
-        let tempTask = { id: task.id, text: task.text, completed: task.completed };
-        tempTask.completed = !tempTask.completed;
-        return tempTask;
-      }
-      return task;
-    });
+    // Make the code simpler but works the same
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, completed: !task.completed } : task
+    );
     setTasks(updatedTasks);
   };
 
@@ -57,11 +56,10 @@ export function ClunkyTodoList() {
     } else if (filter === "active") {
       filteredTasks = tasks.filter((task) => !task.completed);
     }
-
-    // Note:
+    // NOTE:
     // This is working on all filters.
-    // But I need clarification with the all filter.
-    // Should pressing the "All" button turn off the word filter?
+    // But I need clarification with the "All" filter.
+    // Should pressing the "All" button turn off the multiple words filter?
     if (moreWordsFilter) {
       filteredTasks = filteredTasks.filter((task) => task.text.trim().split(" ").length > 1);
     }
@@ -76,40 +74,26 @@ export function ClunkyTodoList() {
     <div>
       <h1>To-Do List</h1>
       <h2>Items: {totalCount}</h2>
-      <input
-        type="text"
-        value={newTask}
-        onChange={handleInputChange}
-        placeholder="Add new task"
+
+      <ClunkyControls
+        newTask={newTask}
+        handleInputChange={handleInputChange}
+        handleAddTask={handleAddTask}
+        handleRemoveCompleted={handleRemoveCompleted}
       />
-      <button onClick={handleAddTask}>Add</button>
-      <button onClick={handleRemoveCompleted}>Remove completed</button>
-      <div>
-        <button onClick={() => setFilter("all")}>All</button>
-        <button onClick={() => setFilter("active")}>Active</button>
-        <button onClick={() => setFilter("completed")}>Completed</button>
-      </div>
-      <div>
-        <button onClick={() => setMoreWordsFilter(!moreWordsFilter)}>More than one word: {moreWordsFilter ? "ON" : "OFF"}</button>
-      </div>
-      <ul>
-        {tasksToRender.map((task, index) => (
-          <li key={index}>
-            <input
-              type="checkbox"
-              checked={task.completed}
-              onChange={() => handleToggleComplete(task.id)}
-            />
-            <span
-              style={{
-                textDecoration: task.completed ? "line-through" : "none",
-              }}
-            >
-              {task.text} <a href="#" onClick={() => handleDeleteTask(task.id)}>[✘]</a>
-            </span>
-          </li>
-        ))}
-      </ul>
+
+      <ClunkyFilter
+        filter={filter}
+        setFilter={setFilter}
+        moreWordsFilter={moreWordsFilter}
+        setMoreWordsFilter={setMoreWordsFilter}
+      />
+
+      <ClunkyList
+        tasks={tasksToRender}
+        handleToggleComplete={handleToggleComplete}
+        handleDeleteTask={handleDeleteTask}
+      />
     </div>
   );
 }

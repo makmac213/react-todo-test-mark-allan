@@ -54,6 +54,9 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+button.active {
+  color: #cc3c3c;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -66,4 +69,42 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+#controls-container,
+#filter-container,
+#task-list-container {
+  margin-bottom: 10px;
+}
+
+.filter-buttons {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 5px;
+}
+
+.filter-buttons button {
+  flex: 1;
+}
+
+#controls-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+#controls-container input {
+  flex: 2;
+}
+
+#controls-container button {
+  flex: 1;
+  margin-left: 10px;
+}
+
+#task-list-container li div {
+  display: inline-block;
+}
+
+.task-item-action {
+  float: right;
 }
