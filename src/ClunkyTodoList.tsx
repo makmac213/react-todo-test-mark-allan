@@ -9,7 +9,7 @@ export function ClunkyTodoList() {
   const [newTask, setNewTask] = useState("");
   const [filter, setFilter] = useState("all");
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTask(event.target.value);
   };
 
@@ -22,7 +22,7 @@ export function ClunkyTodoList() {
     }
   };
 
-  const handleToggleComplete = (id) => {
+  const handleToggleComplete = (id: number) => {
     const updatedTasks = tasks.map((task) => {
       if (task.id === id) {
         let tempTask = { id: task.id, text: task.text, completed: task.completed };
@@ -35,6 +35,7 @@ export function ClunkyTodoList() {
   };
 
   const [tasksToRender, setTasksToRender] = useState<any[]>([])
+
   useEffect(() => {
     let filteredTasks = tasks;
     if (filter === "completed") {
@@ -43,11 +44,11 @@ export function ClunkyTodoList() {
       filteredTasks = tasks.filter((task) => !task.completed);
     }
     setTasksToRender(filteredTasks);
-  }, [tasks]);
+  }, [tasks, filter]);
 
   const totalCount = useMemo(() => {
     return tasks.length;
-  }, []);
+  }, [tasks]);
 
   return (
     <div>
